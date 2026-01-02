@@ -1,6 +1,7 @@
 
 from typing import Dict, Any, Optional #to make the code more readable in line 5
 from enum import Enum
+import pygame
 
 class Ability(Enum):
     TAUNT = "taunt"
@@ -41,6 +42,10 @@ class Minion:
 
         self.battlecry_effect = minion_data.get("battlecry_effect") #vaghti  bazish mikoni in kar anjam mishe hand->board
         self.deathrattle_effect = minion_data.get("deathrattle_effect") #vaghti minion mimirad
+
+        # برای رسم روی صفحه (UI)
+        self.font = pygame.font.Font(None, 28)
+        self.small_font = pygame.font.Font(None, 20)
 
 
     def to_dict(self) -> Dict[str, Any]:
@@ -131,7 +136,46 @@ class Minion:
     def __repr__(self):
         return f"<Minion {self.name} {self.c_attack}/{self.c_health} abilities={self.abilities}>" #for debugging
     
-    
+    def draw(self, surface, rect):
+        """رسم مینیون روی صفحه - برای استفاده در RecruitScreen"""
+        # رنگ پس‌زمینه: طلایی اگر golden باشه، معمولی اگر نه
+        bg_color = (255, 215, 0) if self.is_golden else (90, 70, 130)
+        pygame.draw.rect(surface, bg_color, rect, border_radius=10)
+        pygame.draw.rect(surface, (255, 255, 255), rect, 3, border_radius=10)
+
+        # نام مینیون
+        name_surf = self.small_font.render(self.name, True, (255, 255, 255))
+        surface.blit(name_surf, name_surf.get_rect(center=(rect.centerx, rect.top + 20)))
+
+        # نمایش tribe (نژاد) - اگر خنثی نبود
+        if self.tribe.lower() != "none":
+            tribe_surf = pygame.font.Font(None, 18).render(self.tribe.capitalize(), True, (180, 180, 255))
+            surface.blit(tribe_surf, tribe_surf.get_rect(center=(rect.centerx, rect.top + 40)))
+
+        # حمله (Attack)
+        atk_surf = self.font.render(str(self.c_attack), True, (255, 100, 100))
+        surface.blit(atk_surf, atk_surf.get_rect(bottomleft=(rect.left + 15, rect.bottom - 10)))
+
+        # سلامتی (Health)
+        hp_surf = self.font.render(str(self.c_health), True, (100, 255, 100))
+        surface.blit(hp_surf, hp_surf.get_rect(bottomright=(rect.right - 15, rect.bottom - 10)))
+
+        # هزینه خرید (توکن‌ها ۰)
+        cost_text = "0" if self.is_token else str(self.cost)
+        cost_surf = self.small_font.render(cost_text, True, (255, 215, 0))
+        surface.blit(cost_surf, cost_surf.get_rect(center=(rect.centerx, rect.bottom - 15)))
+
+        # علامت Divine Shield (دایره آبی)
+        if self.divine_shield:
+            pygame.draw.circle(surface, (200, 200, 255), (rect.right - 20, rect.top + 20), 12)
+            ds_text = pygame.font.Font(None, 16).render("DS", True, (0, 0, 0))
+            surface.blit(ds_text, ds_text.get_rect(center=(rect.right - 20, rect.top + 20)))
+
+        # علامت Reborn (دایره سبز)
+        if self.reborn_active and not self.reborn_used:
+            pygame.draw.circle(surface, (100, 255, 100), (rect.left + 20, rect.top + 20), 12)
+            rb_text = pygame.font.Font(None, 16).render("R", True, (0, 0, 0))
+            surface.blit(rb_text, rb_text.get_rect(center=(rect.left + 20, rect.top + 20)))
             
 
 
