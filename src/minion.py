@@ -93,7 +93,7 @@ class Minion:
             self.divine_shield = False
             return "Divine_shield broken"
         self.c_health -= damage
-        if self.c_health <= damage:
+        if self.c_health <= 0:
             self.alive = False
             return "Killed!"
         return "Damaged!"
