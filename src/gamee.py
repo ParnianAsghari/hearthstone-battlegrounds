@@ -1,11 +1,9 @@
-
-
 import pygame
 
-from title_screen import Title
-from hero_select import HeroSelect  
-from gameplay import Gameplay
-from recruit_screen import RecruitScreen
+from src.title_screen import Title
+from src.hero_select import HeroSelect  
+from src.gameplay import Gameplay
+from src.recruit_screen import RecruitScreen
 
 class Game:
     def __init__(self):
@@ -31,8 +29,8 @@ class Game:
         self.r = True 
 
         self.hero_selected = None 
-        self.screens["title"] = Title(self.screen, self.change_scr)
-        self.screens["hero_select"] = HeroSelect(self.screen, self.change_scr)
+        self.screens["title"] = Title(self.screen, self.change_screen)
+        self.screens["hero_select"] = HeroSelect(self.screen, self.change_screen)
 
     def change_screen(self, name, **kwargs):
         if name == "recruit" and "hero" in kwargs:

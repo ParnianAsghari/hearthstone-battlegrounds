@@ -1,5 +1,5 @@
 import pygame
-from button import Button
+from src.button import Button
 
 class HeroSelect:
     def __init__(self, screen, change_scr):

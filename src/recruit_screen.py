@@ -2,9 +2,9 @@
 
 import pygame
 import random
-from button import Button
-from minion import Minion
-from minion_db import MINIONS_DB
+from src.button import Button
+from src.minion import Minion
+from src.minion_db import MINIONS_DB
 
 class RecruitScreen:
     def __init__(self, screen, change_scr, hero_name):
