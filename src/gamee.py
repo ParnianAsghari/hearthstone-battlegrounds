@@ -6,7 +6,7 @@ from src.recruit_screen import RecruitScreen
 
 class Game:
     def __init__(self):
-        pygame.init()
+        pygame.init() 
         self.screen = pygame.display.set_mode((900, 600))
         pygame.display.set_caption("Hearthstone Battlegrounds")
         self.clock = pygame.time.Clock()
