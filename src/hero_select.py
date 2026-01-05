@@ -1,4 +1,3 @@
-# src/hero_select.py
 import pygame
 from src.button import Button
 
@@ -7,7 +6,7 @@ class HeroSelect:
         self.screen = screen
         self.change_scr = change_scr
 
-        self.heroes = ["Sylvanas", "Lich King", "Millhouse", "Yogg-Saron"]  # هیروهای فاز
+        self.heroes = ["Sylvanas", "Lich King", "Millhouse", "Yogg-Saron"] 
         self.selected_hero = None
 
         self.hero_buttons = []
@@ -53,7 +52,7 @@ class HeroSelect:
                 btn.handle_event(event)
             self.confirm_button.handle_event(event)
 
-    def update(self, dt):  # <-- اضافه شد
+    def update(self, dt):
         pass
 
     def render(self, surface):

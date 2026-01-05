@@ -30,22 +30,18 @@ class Gameplay:
             if event.type == pygame.QUIT:
                 pygame.event.post(pygame.event.Event(pygame.QUIT))
             else:
-                # مدیریت Drag & Drop
                 self.drag_manager.handle_event(event, self.hand, self.board)
 
-                # خرید فروشگاه
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = event.pos
                     for i, slot in enumerate(self.shop.slots):
                         rect = pygame.Rect(100 + i*120, 100, 100, 100)
                         if rect.collidepoint(x, y):
                             self.buy_shop_slot(i)
-                    # فروش Board
                     for i, slot in enumerate(self.board.slots):
                         board_rect = pygame.Rect(100 + i*120, 400, 100, 100)
                         if board_rect.collidepoint(x, y) and slot is not None:
                             self.sell_from_board(i)
-                    # Upgrade Tavern
                     tavern_rect = pygame.Rect(400, 20, 120, 40)
                     if tavern_rect.collidepoint(x, y):
                         if self.economy.upgrade_tavern():
@@ -95,7 +91,7 @@ class Gameplay:
         tavern_text = self.small_font.render(f"Tavern Tier: {self.economy.tavern.tier}", True, (255, 255, 0))
         surface.blit(tavern_text, (400, 20))
 
-        # فروشگاه
+        # shop
         for i, slot in enumerate(self.shop.slots):
             x, y, w, h = 100 + i*120, 100, 100, 100
             color = (200, 200, 200) if slot.minion else (100, 100, 100)
@@ -112,5 +108,4 @@ class Gameplay:
         board_text = self.small_font.render(f"Board: {', '.join([str(m) for m in self.board.slots])}", True, (255, 255, 255))
         surface.blit(board_text, (20, 400))
 
-        # کارت‌های Drag & Drop روی Hand/Board
         self.drag_manager.render(surface, self.small_font)

@@ -1,4 +1,3 @@
-# src/title_screen.py
 import pygame
 from src.button import Button
 
@@ -32,7 +31,7 @@ class Title:
             self.start_button.handle_event(event)
             self.quit_button.handle_event(event)
 
-    def update(self, dt):  # <-- اضافه شد (حتی خالی)
+    def update(self, dt):  
         pass
 
     def render(self, surface):

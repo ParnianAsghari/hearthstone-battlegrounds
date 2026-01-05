@@ -1,4 +1,3 @@
-# src/services/game_service.py
 import random
 from typing import Dict, Any, List
 from src.minion_db import MINIONS_DB
@@ -6,7 +5,7 @@ from src.minion_db import MINIONS_DB
 
 class GameService:
     def __init__(self, initial_state: Dict[str, Any], hero_name: str = "Sylvanas Windrunner"):
-        self.state = initial_state.copy()  # کپی تا اورجینال تغییر نکنه
+        self.state = initial_state.copy() 
         self.state["hand"] = initial_state.get("hand", [])
         self.state["board"] = initial_state.get("board", [])
         self.state["shop"] = initial_state.get("shop", [])
@@ -16,7 +15,7 @@ class GameService:
         self.state["health"] = initial_state.get("health", 40)
 
         self.hero_name = hero_name
-        self.last_combat_died: List[str] = []  # برای hero power سیلواناس
+        self.last_combat_died: List[str] = []
 
     def get_state(self) -> Dict[str, Any]:
         return self.state
@@ -55,15 +54,13 @@ class GameService:
         if len(self.state["hand"]) >= 10:
             return {"type": "error", "message": "Hand is full (max 10)"}
 
-        # خرید موفق
         self.state["gold"] -= 3
         self.state["hand"].append(card_id)
-        self.state["shop"][slot] = None  # اسلات خالی می‌مونه تا refresh یا end turn
+        self.state["shop"][slot] = None
 
-        # چک Triple
         reward = self._check_triple(card_id)
         if reward:
-            return reward  # Discover رو برمی‌گردونه
+            return reward 
 
         return {
             "type": "success",
@@ -105,10 +102,7 @@ class GameService:
             return {"type": "error", "message": "Board is full (max 7)"}
 
         card_id = self.state["hand"].pop(hand_slot)
-        self.state["board"].append(card_id)  # ساده، بعداً target slot اضافه می‌کنیم
-
-        # Battlecry اینجا اجرا می‌شه (بعداً)
-
+        self.state["board"].append(card_id)  
         return {
             "type": "success",
             "message": "Minion played",
@@ -144,21 +138,19 @@ class GameService:
 
         self.state["gold"] -= cost
 
-        # فقط برای سیلواناس فعلاً
         if self.hero_name == "Sylvanas Windrunner" and self.last_combat_died:
-            # بعداً منطق دقیق +2/+1 به مینیون‌های مرده
             return {"type": "success", "message": "Reclaimed Souls used!"}
 
         return {"type": "success", "message": f"{self.hero_name} power used!"}
 
     def _handle_next_turn(self, _: dict) -> dict:
         self.state["turn"] += 1
-        new_gold = min(self.state["turn"] + 2, 10)  # Turn 1 → 3, Turn 2 → 4, ..., Turn 8+ → 10
+        new_gold = min(self.state["turn"] + 2, 10)
         self.state["gold"] = new_gold
 
         if not self.state["shop_frozen"]:
             self._fill_shop()
-        self.state["shop_frozen"] = False  # آنفریز خودکار
+        self.state["shop_frozen"] = False 
 
         return {
             "type": "next_turn",
@@ -173,10 +165,10 @@ class GameService:
     def _fill_shop(self):
         tier = self.state["tavern_tier"]
         available = [cid for cid, data in MINIONS_DB.items() if data["tier"] <= tier]
-        slots = 3 + tier - 1  # Tier1:3, Tier2:4, Tier3:4, Tier4:5
+        slots = 3 + tier - 1 
         shop = []
         for _ in range(slots):
-            if random.choice([True, False]) and available:  # شانس خالی بودن اسلات کم
+            if random.choice([True, False]) and available:
                 shop.append(random.choice(available))
             else:
                 shop.append(None)
@@ -185,7 +177,6 @@ class GameService:
     def _check_triple(self, card_id: str) -> dict | None:
         count = sum(1 for c in self.state["hand"] + self.state["board"] if c == card_id)
         if count == 3:
-            # پیدا کردن و حذف ۳ کپی
             removed = 0
             for container in [self.state["hand"], self.state["board"]]:
                 i = 0
@@ -195,11 +186,9 @@ class GameService:
                         removed += 1
                     else:
                         i += 1
-            # اضافه کردن نسخه Golden به برد
-            golden_id = card_id + "_golden"  # یا منطق واقعی
+            golden_id = card_id + "_golden" 
             self.state["board"].append(golden_id)
 
-            # Discover Tier +1
             return {
                 "type": "discover_offer",
                 "tier": self.state["tavern_tier"] + 1,

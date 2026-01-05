@@ -25,6 +25,9 @@ class Tavern:
         if self.tier < 4:
             self.tier += 1
             self.discount = 0
+    def get_shop_slots(self):
+        data = TAVERN_TABLE[self.tier]
+        return data["slots"]
 
 class Economy:
     MAX_GOLD = 10
@@ -53,8 +56,13 @@ class Economy:
         self.gold = min(self.gold + amount, self.MAX_GOLD)
 
     def upgrade_tavern(self):
-        cost = self.tavern.upgrade_cost()
-        if self.spend(cost):
-            self.tavern.upgrade()
-            return True
-        return False
+        if self.economy.upgrade_tavern():
+            print(f"Tavern upgraded to Tier {self.economy.tavern.tier}! Gold left: {self.economy.gold}")
+            
+            new_slots_count = self.economy.tavern.get_shop_slots()
+            self.shop_slots = self.create_slots(new_slots_count, 120, 100, 140, 200, 30)
+            
+            if len(self.shop) < new_slots_count and not self.shop_frozen:
+                self.refresh_shop()
+        else:
+            print("Not enough gold to upgrade Tavern!")

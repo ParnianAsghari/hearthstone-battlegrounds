@@ -1,4 +1,3 @@
-# gamee.py
 import pygame
 from src.title_screen import Title
 from src.hero_select import HeroSelect
@@ -35,7 +34,7 @@ class Game:
 
             if self.current_screen:
                 self.current_screen.handle_events(events)
-                self.current_screen.update(dt)  # حالا درست شده
+                self.current_screen.update(dt)
                 self.current_screen.render(self.screen)
 
             pygame.display.flip()
