@@ -1,4 +1,4 @@
-# services/economy.py
+# src/services/economy.py
 
 TAVERN_TABLE = {
     1: {"base": 5, "min": 2, "slots": 3, "odds": [1.0, 0.0, 0.0]},
@@ -32,14 +32,12 @@ class Economy:
     def __init__(self):
         self.turn = 1
         self.gold = 3
-        self.full_gold_warning = False
         self.tavern = Tavern()
 
     def start_turn(self):
         self.turn += 1
         if self.gold < self.MAX_GOLD:
             self.gold = min(self.gold + 1, self.MAX_GOLD)
-        self.full_gold_warning = (self.gold == self.MAX_GOLD)
         self.tavern.end_turn()
 
     def can_spend(self, amount):

@@ -1,3 +1,4 @@
+# src/button.py
 import pygame
 
 class Button:
@@ -13,14 +14,13 @@ class Button:
     def handle_event(self, event):
         if event.type == pygame.MOUSEMOTION:
             self.current_color = self.hover_color if self.rect.collidepoint(event.pos) else self.color
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos):
                 self.on_click()
 
     def draw(self, surface):
         pygame.draw.rect(surface, self.current_color, self.rect, border_radius=10)
-        pygame.draw.rect(surface, (250, 250, 250), self.rect, 3 ,border_radius=10) # kadr
-
-        text_surf = self.font.render(self.text, True, (250, 250, 250)) # text daron
-        text_rect = text_surf.get_rect(center = self.rect.center)
+        pygame.draw.rect(surface, (250, 250, 250), self.rect, 3, border_radius=10)
+        text_surf = self.font.render(self.text, True, (250, 250, 250))
+        text_rect = text_surf.get_rect(center=self.rect.center)
         surface.blit(text_surf, text_rect)
