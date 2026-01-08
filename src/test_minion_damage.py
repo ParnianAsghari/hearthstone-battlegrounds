@@ -22,7 +22,7 @@ def run():
     pygame.init()
     pygame.font.init()
 
-    # سناریو 1: بدون DS، ضربه کشنده
+
     m1 = make_minion(hp=2, ds=False)
     out1 = m1.damage_khor(2)
     assert out1 == "Killed!"
@@ -30,7 +30,7 @@ def run():
     assert m1.zone == "grave"
     assert m1.board_position is None
 
-    # سناریو 2: با DS، ضربه اول فقط DS را می‌شکند و HP کم نمی‌شود
+
     m2 = make_minion(hp=5, ds=True)
     out2 = m2.damage_khor(3)
     assert out2 == "Divine_shield broken"
@@ -40,7 +40,7 @@ def run():
     assert m2.zone == "board"
     assert m2.board_position == 0
 
-    # سناریو 3: با DS، ضربه اول DS را می‌شکند، ضربه دوم می‌کُشد
+
     m3 = make_minion(hp=2, ds=True)
     out3a = m3.damage_khor(999)
     assert out3a == "Divine_shield broken"
@@ -53,7 +53,7 @@ def run():
     assert m3.zone == "grave"
     assert m3.board_position is None
 
-    print("ALL TESTS PASSED ✅")
+    print("ALL TESTS PASSED")
 
 if __name__ == "__main__":
     run()
