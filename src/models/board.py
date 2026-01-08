@@ -1,3 +1,4 @@
+
 class Board:
     def __init__(self):
         self.slots = [None] * 7 
@@ -20,3 +21,9 @@ class Board:
 
     def is_occupied(self, index):
         return 0 <= index < len(self.slots) and self.slots[index] is not None
+    
+    def snapshot_board(self) -> "Board":
+        from src.services.minion_factory import clone_minion_state
+        snap = Board()
+        snap.slots = [(clone_minion_state(m, keep_instance_id = True) if m is not None else None) for m in self.slots]
+        return snap
