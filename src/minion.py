@@ -17,6 +17,7 @@ class Ability(Enum):
 class Minion:
     def __init__(self, minion_data : Dict[str, Any]): #can be any type of data
         self.id : str = minion_data["id"]
+        self.instance_id: str = str(minion_data.get("instance_id", self.id))
         self.name : str = minion_data["name"]
         self.tier : int = int(minion_data["tier"]) #sath ghodrat minion 
         self.base_attack : int = int(minion_data["base_attack"])
@@ -43,7 +44,7 @@ class Minion:
         self.battlecry_effect = minion_data.get("battlecry_effect") #vaghti  bazish mikoni in kar anjam mishe hand->board
         self.deathrattle_effect = minion_data.get("deathrattle_effect") #vaghti minion mimirad
 
-        # برای رسم روی صفحه (UI)
+
         self.font = pygame.font.Font(None, 28)
         self.small_font = pygame.font.Font(None, 20)
 
@@ -94,7 +95,7 @@ class Minion:
             return "Divine_shield broken"
         self.c_health -= damage
         if self.c_health <= 0:
-            self.alive = False
+            self.mark_dead()
             return "Killed!"
         return "Damaged!"
     def mark_dead(self) -> None:
