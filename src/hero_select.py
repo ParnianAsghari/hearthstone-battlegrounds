@@ -1,5 +1,6 @@
+# hero_select.py (کامل)
 import pygame
-from src.button import Button
+from button import Button
 
 class HeroSelect:
     def __init__(self, screen, change_scr):
@@ -56,7 +57,7 @@ class HeroSelect:
         pass
 
     def render(self, surface):
-        surface.fill((50, 0, 80))
+        surface.fill((50, 0, 80))  # رنگ ثابت برای یکدستی UI
         title_rect = self.title_text.get_rect(center=(surface.get_width()//2, 100))
         surface.blit(self.title_text, title_rect)
 
